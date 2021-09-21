@@ -1,8 +1,10 @@
+/*
 const http = require('http')
 const fs = require('fs')
 const path = require('path')
+*/
 
-const server = http.createServer((req, res) =>{
+/*const server = http.createServer((req, res) =>{
 
     let filePath = path.join(__dirname, 'public', req.url === '/' ? 'index.html' : req.url)
     const ext = path.extname(filePath)
@@ -42,11 +44,29 @@ const server = http.createServer((req, res) =>{
             })
             res.end(content)
         }
-    })
-})
+    })*/
+    const express = require('express');
+    const app = express();
 
-const PORT = process.env.PORT || 3000
+const helloResponse = app.get('/', (req, res) => {
+    res.sendFile(__dirname + "/public/index.html");
+});
+const contactResponse = app.get('/contact', (req, res) => {
+    res.sendFile(__dirname + "/public/contact.html");
+});
 
+if (app.get !== helloResponse && app.get !== contactResponse){
+    app.get((req, res) => {
+        res.sendFile(__dirname + "/public/error.html");
+    });
+}
+
+    app.listen(3000);
+//})
+
+/*//const PORT = process.env.PORT || 3000
+
+/!*
 server.listen(3000, () =>{
     console.log(`Server has been started on ${PORT}...`)
-})
+})*!/*/
