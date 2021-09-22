@@ -1,52 +1,20 @@
-/*
-const http = require('http')
-const fs = require('fs')
-const path = require('path')
-*/
+const express = require('express');
+const mongoose = require('mongoose')
+const exphbs = require('express-handlebars')
+const todoRoutes = require('./routes/todos')
 
-/*const server = http.createServer((req, res) =>{
+const PORT = process.env.PORT || 3000;
+const app = express();
+const hbs = exphbs.create({
+    defaultLayout: 'main',
+    extname: 'hbs'
+})
 
-    let filePath = path.join(__dirname, 'public', req.url === '/' ? 'index.html' : req.url)
-    const ext = path.extname(filePath)
-    let contentType = 'text/html'
+app.engine('hbs', hbs.engine)
+app.set('view engine', 'hbs')
+app.set('views', 'views')
 
-    switch (ext){
-        case '.css':
-            contentType = 'text/css'
-            break
-        case '.js':
-            contentType = 'text/javascript'
-            break
-        default:
-            contentType = 'text/html'
-    }
-
-    if (!ext) {
-        filePath += '.html'
-    }
-
-    fs.readFile(filePath, (err, content) =>{
-        if (err) {
-            fs.readFile(path.join(__dirname, 'public', 'error.html'), (err, data) =>{
-                if (err){
-                    res.writeHead(500)
-                    res.end('Error')
-                } else {
-                    res.writeHead(200, {
-                        'Content-Type': 'text/html'
-                    })
-                    res.end(data)
-                }
-            })
-        } else {
-            res.writeHead(200, {
-                'Content-Type': contentType
-            })
-            res.end(content)
-        }
-    })*/
-    const express = require('express');
-    const app = express();
+app.use(todoRoutes)
 
 const helloResponse = app.get('/', (req, res) => {
     res.sendFile(__dirname + "/public/index.html");
@@ -61,12 +29,17 @@ if (app.get !== helloResponse && app.get !== contactResponse){
     });
 }
 
-    app.listen(3000);
-//})
-
-/*//const PORT = process.env.PORT || 3000
-
-/!*
-server.listen(3000, () =>{
-    console.log(`Server has been started on ${PORT}...`)
-})*!/*/
+async function start() {
+    try {
+        await mongoose.connect('mongodb+srv://jovakinn:1q2w3e4r@cluster0.endkw.mongodb.net/todos', {
+            useNewUrlParser: true,
+            useFindAndModify: false
+        })
+        app.listen(PORT, () => {
+            console.log('Server has been started...')
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+start()
