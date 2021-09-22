@@ -23,7 +23,7 @@ app.use(todoRoutes)
 async function start() {
     try {
         await mongoose.connect(
-            'mongodb+srv://jovakinn:1q2w3e4r@cluster0-ua4e7.mongodb.net/todos',
+            'mongodb+srv://jovakinn:1q2w3e4r@cluster0.endkw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
             {
                 useNewUrlParser: true,
                 useFindAndModify: false
